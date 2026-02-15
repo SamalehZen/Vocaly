@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:docs.microsoft.com)",
+      "Bash(bun build:rust:win:*)",
+      "Bash(bun runTest:*)",
+      "Bash(bun test:*)",
+      "Bash(cargo build:*)",
+      "Bash(git show:*)",
+      "WebFetch(domain:stackoverflow.com)",
+      "WebFetch(domain:www.electronjs.org)",
+      "WebFetch(domain:www.electron.build)",
+      "Bash(where:*)",
+      "Bash(cargo test)",
+      "Bash(cargo test:*)",
+      "Bash(bun:*)",
+      "Bash(cargo clippy:*)",
+      "Bash(cargo clean:*)",
+      "Bash(awk:*)",
+      "WebFetch(domain:connectrpc.com)",
+      "Bash(git log:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

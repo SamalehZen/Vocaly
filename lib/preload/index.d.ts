@@ -1,0 +1,208 @@
+import { ElectronAPI } from '@electron-toolkit/preload'
+import type api from './api'
+type TrialStatus = {
+  success: boolean
+  trialDays: number
+  trialStartAt: string | null
+  daysLeft: number
+  isTrialActive: boolean
+  hasCompletedTrial: boolean
+  error?: string
+  status?: number
+}
+
+interface KeyEvent {
+  type: 'keydown' | 'keyup'
+  key: string
+  timestamp: string
+  raw_code: number
+}
+
+interface StoreAPI {
+  get(key: string): any
+  set(property: string, val: any): void
+}
+
+interface UpdaterAPI {
+  onUpdateAvailable: (callback: () => void) => void
+  onUpdateDownloaded: (callback: () => void) => void
+  installUpdate: () => void
+}
+
+interface SelectedTextOptions {
+  format?: 'json' | 'text'
+  maxLength?: number
+}
+
+interface SelectedTextResult {
+  success: boolean
+  text: string | null
+  error: string | null
+  length: number
+}
+
+interface SelectedTextAPI {
+  get: (options?: SelectedTextOptions) => Promise<SelectedTextResult>
+  getString: (maxLength?: number) => Promise<string | null>
+  hasSelected: () => Promise<boolean>
+}
+
+declare global {
+  interface Window {
+    electron: ElectronAPI & {
+      store: StoreAPI
+    }
+    api: typeof api & {
+      updater: UpdaterAPI
+      startKeyListener: () => Promise<boolean>
+      stopKeyListener: () => Promise<boolean>
+      startNativeRecording: (deviceId: string) => Promise<void>
+      stopNativeRecording: () => Promise<void>
+      blockKeys: (keys: string[]) => Promise<void>
+      unblockKey: (key: string) => Promise<void>
+      getBlockedKeys: () => Promise<void>
+      onKeyEvent: (callback: (event: KeyEvent) => void) => void
+      send: (channel: string, data: any) => void
+      on: (channel: string, callback: (...args: any[]) => void) => () => void
+      setPillMouseEvents: (
+        ignore: boolean,
+        options?: { forward?: boolean },
+      ) => Promise<void>
+      generateNewAuthState: () => Promise<any>
+      exchangeAuthCode: (data: any) => Promise<any>
+      logout: () => Promise<void>
+      notes: {
+        getAll: () => Promise<Note[]>
+        add: (note: any) => Promise<Note>
+        updateContent: (id: string, content: string) => Promise<void>
+        delete: (id: string) => Promise<void>
+      }
+      dictionary: {
+        getAll: () => Promise<any[]>
+        add: (item: any) => Promise<any>
+        update: (
+          id: string,
+          word: string,
+          pronunciation: string | null,
+        ) => Promise<void>
+        delete: (id: string) => Promise<void>
+      }
+      userDetails: {
+        get: () => Promise<{
+          details: {
+            full_name: string
+            occupation: string
+            company_name: string | null
+            role: string | null
+            email: string | null
+            phone_number: string | null
+            business_address: string | null
+            website: string | null
+            linkedin: string | null
+          } | null
+          additionalInfo: {
+            info_key: string
+            info_value: string
+            sort_order: number
+          }[]
+        }>
+        save: (data: {
+          details: {
+            full_name: string
+            occupation: string
+            company_name?: string
+            role?: string
+            email?: string
+            phone_number?: string
+            business_address?: string
+            website?: string
+            linkedin?: string
+          }
+          additionalInfo: { key: string; value: string }[]
+        }) => Promise<{ success: boolean }>
+      }
+      interactions: {
+        getAll: () => Promise<any[]>
+        getById: (id: string) => Promise<any>
+        delete: (id: string) => Promise<void>
+      }
+      loginItem: {
+        setSettings: (enabled: boolean) => Promise<void>
+        getSettings: () => Promise<Electron.LoginItemSettings>
+      }
+      dock: {
+        setVisibility: (visible: boolean) => Promise<void>
+        getVisibility: () => Promise<{ isVisible: boolean }>
+      }
+      notifySettingsUpdate: (settings: any) => void
+      notifyOnboardingUpdate: (onboarding: any) => void
+      notifyUserAuthUpdate: (authUser: any) => void
+
+      getOnboardingState: () => Promise<{
+        onboardingStep?: number
+        onboardingCompleted?: boolean
+      } | null>
+
+      // Analytics device ID methods
+      'analytics:get-device-id': () => Promise<string | undefined>
+      'analytics:resolve-install-token': () => Promise<{
+        success: boolean
+        websiteDistinctId?: string | null
+        error?: string
+        status?: number
+      }>
+
+      notifyLoginSuccess: (
+        profile: any,
+        idToken: string | null,
+        accessToken: string | null,
+      ) => Promise<void>
+      trial: {
+        start: () => Promise<TrialStatus>
+        complete: () => Promise<TrialStatus>
+      }
+      billing: {
+        createCheckoutSession: () => Promise<{
+          success: boolean
+          url?: string
+          error?: string
+          status?: number
+        }>
+        confirmSession: (sessionId: string) => Promise<{
+          success: boolean
+          pro_status?: 'active_pro' | 'free_trial' | 'none'
+          subscriptionStartAt?: string
+          error?: string
+          status?: number
+        }>
+        status: () => Promise<{
+          success: boolean
+          pro_status: 'active_pro' | 'free_trial' | 'none'
+          subscriptionStartAt?: string
+          trial?: {
+            trialDays: number
+            trialStartAt: string | null
+            daysLeft: number
+            isTrialActive: boolean
+            hasCompletedTrial: boolean
+          }
+          error?: string
+          status?: number
+        }>
+      }
+      deleteUserData: () => Promise<void>
+      selectedText: SelectedTextAPI
+      logs: {
+        download: () => Promise<{
+          success: boolean
+          path?: string
+          error?: string
+        }>
+        clear: () => Promise<{
+          success: boolean
+          error?: string
+        }>
+      }
+    }
+  }
+}

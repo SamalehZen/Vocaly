@@ -1,0 +1,29 @@
+{
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "rust-analyzer.linkedProjects": [
+    "./native/selected-text-reader/Cargo.toml",
+    "./native/text-writer/Cargo.toml",
+    "./native/audio-recorder/Cargo.toml",
+    "./native/active-application/Cargo.toml",
+    "./native/global-key-listener/Cargo.toml"
+  ],
+  "rust-analyzer.cargo.targetDir": "${workspaceFolder}/native/target-rust-analyzer"
+}

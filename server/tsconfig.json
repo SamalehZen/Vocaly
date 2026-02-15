@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "target": "ES2020",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "outDir": "./dist",
+    "allowJs": true
+  },
+  "include": ["src/**/*", "test-client.ts", "scripts/**/*"],
+  "exclude": ["src/**/*.test.ts", "node_modules"],
+  "ts-node": {
+    "esm": true
+  }
+}

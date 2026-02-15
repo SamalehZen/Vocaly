@@ -1,0 +1,23 @@
+out/*
+release/*
+node_modules
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*/dist/*
+dist/*
+.DS_Store
+native/**/target
+native/target-rust-analyzer
+native/**/.build
+out.json
+tsconfig.node.tsbuildinfo
+server/deploy-dev.sh
+
+# Sentry Config File
+.env.sentry-build-plugin
+.electron-builder-cache
+.npm-cache
+.cache
